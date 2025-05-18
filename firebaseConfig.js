@@ -1,22 +1,26 @@
-// firebaseConfig.js
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_APP_ID,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_MEASUREMENT_ID,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+} from '@env';
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage'; // ✅ Import storage
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCkX5plZX0fEQ_2BR9d-QJ8scRXmHy7bQI",
-  authDomain: "expotwo-71098.firebaseapp.com",
-  projectId: "expotwo-71098",
-  storageBucket: "expotwo-71098.firebasestorage.app",
-  messagingSenderId: "663930771804",
-  appId: "1:663930771804:web:093783fedad22f5a678999",
-  measurementId: "G-9W3NNP9466"
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-
-// Auth & Firestore
-export const auth = getAuth(app);
 export const db = getFirestore(app);
-
+export const storage = getStorage(app); // ✅ Export storage

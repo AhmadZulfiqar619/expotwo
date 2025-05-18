@@ -14,11 +14,15 @@ import {
   decreaseQuantity,
   clearCart,
 } from '../../redux/cartSlice';
-import styles from '../../components/cartScreenStyles';
 import { Swipeable } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+
+import styles from '../../components/cartScreenStyles';
+import { useTheme } from '@/context/ThemeContext'; // Import theme hook
 
 const CartScreen = () => {
+  const { theme } = useTheme(); // Get current theme
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
 
@@ -38,7 +42,7 @@ const CartScreen = () => {
       }}
       style={styles.removeButton}
     >
-      <Text style={styles.removeButtonText}>Remove</Text>
+      <Text style={[styles.removeButtonText, { color: '#000' }]}>Remove</Text>
     </TouchableOpacity>
   );
 
@@ -48,21 +52,18 @@ const CartScreen = () => {
         <View style={styles.cartItem}>
           <Image source={{ uri: item.image }} style={styles.image} />
           <View style={styles.details}>
-            <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-            <Text style={styles.price}>${item.price}</Text>
+            {/* All text black */}
+            <Text style={[styles.title, { color: '#000' }]} numberOfLines={2}>
+              {item.title}
+            </Text>
+            <Text style={[styles.price, { color: '#000' }]}>${item.price}</Text>
             <View style={styles.quantityContainer}>
-              <TouchableOpacity
-                onPress={() => dispatch(decreaseQuantity(item.id))}
-                style={styles.quantityBtn}
-              >
-                <Text style={styles.quantityText}>-</Text>
+              <TouchableOpacity onPress={() => dispatch(decreaseQuantity(item.id))} style={styles.quantityBtn}>
+                <Text style={[styles.quantityText, { color: '#000' }]}>-</Text>
               </TouchableOpacity>
-              <Text style={styles.quantityValue}>{item.quantity || 1}</Text>
-              <TouchableOpacity
-                onPress={() => dispatch(increaseQuantity(item.id))}
-                style={styles.quantityBtn}
-              >
-                <Text style={styles.quantityText}>+</Text>
+              <Text style={[styles.quantityValue, { color: '#000' }]}>{item.quantity || 1}</Text>
+              <TouchableOpacity onPress={() => dispatch(increaseQuantity(item.id))} style={styles.quantityBtn}>
+                <Text style={[styles.quantityText, { color: '#000' }]}>+</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -72,9 +73,18 @@ const CartScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: theme === 'light' ? '#fff' : '#121212' }, // toggle screen bg
+      ]}
+    >
+      <StatusBar style={theme === 'light' ? 'dark' : 'light'} />
+
       {cartItems.length === 0 ? (
-        <Text style={styles.emptyText}>Your cart is empty.</Text>
+        <Text style={[styles.emptyText, { color: '#000' }]}>
+          Your cart is empty.
+        </Text>
       ) : (
         <>
           <FlatList
@@ -84,12 +94,13 @@ const CartScreen = () => {
             contentContainerStyle={{ paddingBottom: 100 }}
           />
           <View style={styles.footer}>
-            <Text style={styles.totalText}>Total: ${getTotalPrice()}</Text>
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => dispatch(clearCart())}
-            >
-              <Text style={styles.clearButtonText}>Clear Cart</Text>
+            <Text style={[styles.totalText, { color: '#000' }]}>
+              Total: ${getTotalPrice()}
+            </Text>
+            <TouchableOpacity style={styles.clearButton} onPress={() => dispatch(clearCart())}>
+              <Text style={[styles.clearButtonText, { color: '#000' }]}>
+                Clear Cart
+              </Text>
             </TouchableOpacity>
           </View>
         </>

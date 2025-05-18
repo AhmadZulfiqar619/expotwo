@@ -1,6 +1,7 @@
 import React from "react";
-import { FlatList, Image, StatusBar, Text, View } from "react-native";
-import styles from "../../components/tabsStyles"; // Importing styles from components folder
+import { FlatList, Image, StatusBar, Text, View, TouchableOpacity } from "react-native";
+import styles from "../../components/tabsStyles";
+import { useTheme } from "@/context/ThemeContext";
 
 const introData = [
   {
@@ -24,26 +25,53 @@ const introData = [
 ];
 
 const IntroItem = ({ item }) => (
-  <View style={styles.card}>
+  <View style={[styles.card, { backgroundColor: "#fff" }]}>
     <Image source={item.image} style={styles.image} />
-    <Text style={styles.title}>{item.title}</Text>
-    <Text style={styles.description}>{item.description}</Text>
+    <Text style={[styles.title, { color: "#000" }]}>{item.title}</Text>
+    <Text style={[styles.description, { color: "#000" }]}>{item.description}</Text>
   </View>
 );
 
-const index = () => {
+const Index = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+    <View style={{ flex: 1, backgroundColor: theme === "light" ? "#fff" : "#121212" }}>
+      <StatusBar barStyle={theme === "light" ? "dark-content" : "light-content"} />
+      
       <FlatList
         contentContainerStyle={styles.listContent}
         data={introData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <IntroItem item={item} />}
         showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
       />
+
+      <View
+        style={{
+          padding: 16,
+          backgroundColor: theme === "light" ? "#fff" : "#121212",
+          borderTopWidth: 1,
+          borderTopColor: theme === "light" ? "#ccc" : "#333",
+        }}
+      >
+        <TouchableOpacity
+          onPress={toggleTheme}
+          style={{
+            padding: 12,
+            backgroundColor: theme === "light" ? "#000" : "#fff",
+            borderRadius: 8,
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: theme === "light" ? "#fff" : "#000", fontWeight: "bold" }}>
+            Switch to {theme === "light" ? "Dark" : "Light"} Mode
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-export default index;
+export default Index;
